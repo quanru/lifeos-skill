@@ -13,7 +13,8 @@ Obsidian or Aino.
 - Works with the user's real vault settings, PARA folders, templates, and
   periodic-note formats
 - Covers common workflows such as daily capture, task review, theme-note
-  creation, periodic review, note search, and safe task toggling
+  creation, periodic review, note search, safe task toggling, and LLM Wiki
+  `.AI.md` topic-index maintenance
 - Includes a compact command reference in `references/commands.md`
 
 ## Installation

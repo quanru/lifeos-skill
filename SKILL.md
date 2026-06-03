@@ -1,6 +1,6 @@
 ---
 name: lifeos
-description: "Read, query and edit a LifeOS / Obsidian PARA vault (notes, tasks, periodic notes, theme notes, tags) from the command line via the `lifeos` CLI — headless, no Obsidian or Aino needed. Use when the user asks about their tasks or 待办; periodic notes — daily/weekly/monthly/quarterly/yearly review or 日记/周记/月记/季记/年记; theme notes / PARA — projects/areas/resources/archives or 项目/领域/资源/归档/主题; tags / theme tags or 标签/主题标签; wants to find/search notes, capture a thought, or check/update what's on their plate in their LifeOS vault."
+description: "Read, query and edit a LifeOS / Obsidian PARA vault (notes, tasks, periodic notes, theme notes, tags, LLM Wiki / AI Wiki `.AI.md` topic indexes) from the command line via the `lifeos` CLI — headless, no Obsidian or Aino needed. Use when the user asks about their tasks or 待办; periodic notes — daily/weekly/monthly/quarterly/yearly review or 日记/周记/月记/季记/年记; theme notes / PARA — projects/areas/resources/archives or 项目/领域/资源/归档/主题; tags / theme tags or 标签/主题标签; LLM Wiki / AI Wiki / `.AI.md` pages; wants to find/search notes, capture a thought, or check/update what's on their plate in their LifeOS vault."
 ---
 
 # LifeOS
@@ -65,6 +65,9 @@ globally. Every example below is written in that form.
 2. `npx -y @life-os/cli help` is the authoritative command list. For exhaustive
    flags, output shapes and error codes, read
    [`references/commands.md`](references/commands.md).
+3. If the user asks about LLM Wiki, AI Wiki, `.AI.md`, generated topic indexes,
+   or regenerating/auditing AI-readable theme pages, read
+   [`references/llm-wiki.md`](references/llm-wiki.md).
 
 ## Syntax
 
@@ -189,6 +192,14 @@ npx -y @life-os/cli theme:create type=project tag="项目/季度OKR" path="1. �
 - `path=` is yours to choose — the convention is `<paraDir>/<name>/<name>.md` (a
   folder + same-named index note, which is what `{{snapshot}}` lists). Add
   `overwrite` to replace.
+
+## LLM Wiki / AI Wiki topic indexes
+
+For generated `.AI.md` companion pages on top of project / area / resource /
+archive / theme notes, load [`references/llm-wiki.md`](references/llm-wiki.md).
+These pages are derived from theme/index notes and their direct materials; they
+are not created for ordinary captures, periodic notes, meeting notes or one-off
+source documents.
 
 ## Installing and updating the skill
 
