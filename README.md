@@ -1,7 +1,7 @@
 # lifeos-skill
 
-Agent skill for working with a LifeOS / Obsidian PARA vault through the public
-`@life-os/cli` command-line tool.
+Agent skill for working with a [LifeOS / Obsidian PARA vault](https://lifeos.md/)
+through the public `@life-os/cli` command-line tool.
 
 The skill teaches coding agents how to read, search, append to, and update
 LifeOS notes, tasks, periodic notes, PARA theme notes, tags, and LifeOS AI Wiki
@@ -54,7 +54,7 @@ The skill will call `npx -y @life-os/cli` as needed.
 ## Prerequisites
 
 - Node.js 18+
-- A LifeOS / Obsidian vault accessible on disk
+- A [LifeOS / Obsidian PARA vault](https://lifeos.md/) accessible on disk
 - `@life-os/cli` available through npm, invoked by the skill with `npx -y`
 
 ## License
