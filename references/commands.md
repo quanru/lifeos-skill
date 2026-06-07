@@ -144,6 +144,13 @@ Toggle one task's checkbox. `ref` is the `file:line` printed by `tasks` (only th
 trailing `:<digits>` is the line number, so paths with colons are fine).
 `--json` → `{ ok, filePath, action }`.
 
+### `skill install [vault=<path>]`
+
+Install or update the bundled LifeOS agent skill into
+`.agents/skills/lifeos/` inside the resolved vault. The command overwrites
+`SKILL.md` and `references/` with the files embedded in the current
+`@life-os/cli` package, so it is the upgrade path after installing a newer CLI.
+
 ### `help`, `version`
 
 Print usage / version.

@@ -1,6 +1,6 @@
 ---
 name: lifeos
-description: "Read, query and edit a LifeOS / Obsidian PARA vault (notes, tasks, periodic notes, theme notes, tags, LLM Wiki / AI Wiki `.AI.md` topic indexes) from the command line via the `lifeos` CLI — headless, no Obsidian or Aino needed. Use when the user asks about their tasks or 待办; periodic notes — daily/weekly/monthly/quarterly/yearly review or 日记/周记/月记/季记/年记; theme notes / PARA — projects/areas/resources/archives or 项目/领域/资源/归档/主题; tags / theme tags or 标签/主题标签; LLM Wiki / AI Wiki / `.AI.md` pages; wants to find/search notes, capture a thought, or check/update what's on their plate in their LifeOS vault."
+description: "Read, query and edit a LifeOS / Obsidian PARA vault (notes, tasks, periodic notes, theme notes, tags, AI Wiki) from the command line via the `lifeos` CLI — headless, no Obsidian or Aino needed. Use when the user asks about their tasks or 待办; periodic notes — daily/weekly/monthly/quarterly/yearly review or 日记/周记/月记/季记/年记; theme notes / PARA — projects/areas/resources/archives or 项目/领域/资源/归档/主题; tags / theme tags or 标签/主题标签; the LifeOS AI Wiki / `.AI.md` topic synthesis pages or 整理主题 / 更新 AI Wiki; or wants to find/search notes, capture a thought, or check/update what's on their plate in their LifeOS vault."
 ---
 
 # LifeOS
@@ -51,6 +51,16 @@ So: when a user talks about a 项目/领域/资源/主题, work in the theme not
 talk about a day/week/month/quarter/year or "what's on my plate today", work in the
 periodic note — and reuse the theme's tag so the two stay linked.
 
+**AI Wiki (`.AI.md`)** — a third layer that sits **beside** the topic note as a
+sibling `{filename}.AI.md` file. It is the LifeOS AI Wiki: a synthesised
+summary page of what the vault knows about that topic, maintained
+incrementally by this skill. Only **topic / index notes** get one — never
+captures, dailies, meeting notes, or other one-off source files. When the
+user says "整理一下 X 主题"、"更新 AI Wiki"、"看看 AI Wiki 怎么说", follow the
+rules in [`references/ai-wiki.md`](references/ai-wiki.md): it covers source
+scope, page schema, ingest / query / lint flows, and the concrete CLI
+recipes that touch `7 索引/7. AI Wiki 索引.md` and `7 索引/AI Wiki 变更日志.md`.
+
 ## Invocation
 
 Run the CLI with **`npx -y @life-os/cli`** — npx fetches the published package on
@@ -65,9 +75,9 @@ globally. Every example below is written in that form.
 2. `npx -y @life-os/cli help` is the authoritative command list. For exhaustive
    flags, output shapes and error codes, read
    [`references/commands.md`](references/commands.md).
-3. If the user asks about LLM Wiki, AI Wiki, `.AI.md`, generated topic indexes,
-   or regenerating/auditing AI-readable theme pages, read
-   [`references/llm-wiki.md`](references/llm-wiki.md).
+3. For LifeOS AI Wiki maintenance (`.AI.md` topic pages, the central index,
+   the changelog and lint checks), read
+   [`references/ai-wiki.md`](references/ai-wiki.md).
 
 ## Syntax
 
@@ -193,30 +203,17 @@ npx -y @life-os/cli theme:create type=project tag="项目/季度OKR" path="1. �
   folder + same-named index note, which is what `{{snapshot}}` lists). Add
   `overwrite` to replace.
 
-## LLM Wiki / AI Wiki topic indexes
+## Upgrading the skill
 
-For generated `.AI.md` companion pages on top of project / area / resource /
-archive / theme notes, load [`references/llm-wiki.md`](references/llm-wiki.md).
-These pages are derived from theme/index notes and their direct materials; they
-are not created for ordinary captures, periodic notes, meeting notes or one-off
-source documents.
-
-## Installing and updating the skill
-
-The skill is maintained separately from the CLI package. Install it with:
+The skill files inside `.agents/skills/lifeos/` should match your CLI version.
+Run this after upgrading `@life-os/cli`:
 
 ```bash
-npx skills add quanru/lifeos-skill
+npx -y @life-os/cli skill install
 ```
 
-Update installed skills through the Skills CLI:
-
-```bash
-npx skills update lifeos
-```
-
-The CLI code is not bundled in this repository; this skill invokes the published
-CLI through `npx -y @life-os/cli`.
+It copies the bundled SKILL.md + references into your vault's `.agents/skills/lifeos/`
+from the npm package you just upgraded to — no manual download, no git clone.
 
 ## Writing safely
 

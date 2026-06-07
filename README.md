@@ -4,8 +4,8 @@ Agent skill for working with a LifeOS / Obsidian PARA vault through the public
 `@life-os/cli` command-line tool.
 
 The skill teaches coding agents how to read, search, append to, and update
-LifeOS notes, tasks, periodic notes, PARA theme notes, and tags without opening
-Obsidian or Aino.
+LifeOS notes, tasks, periodic notes, PARA theme notes, tags, and LifeOS AI Wiki
+pages without opening Obsidian or Aino.
 
 ## Features
 
@@ -13,9 +13,9 @@ Obsidian or Aino.
 - Works with the user's real vault settings, PARA folders, templates, and
   periodic-note formats
 - Covers common workflows such as daily capture, task review, theme-note
-  creation, periodic review, note search, safe task toggling, and LLM Wiki
-  `.AI.md` topic-index maintenance
-- Includes a compact command reference in `references/commands.md`
+  creation, periodic review, note search, safe task toggling, and LifeOS AI Wiki
+  `.AI.md` topic-page maintenance
+- Includes command and AI Wiki references in `references/`
 
 ## Installation
 
@@ -43,6 +43,10 @@ Add this thought to today's daily note: ...
 
 ```text
 Create a project note for my quarterly planning work.
+```
+
+```text
+Update AI Wiki for every topic under 2 Projects/
 ```
 
 The skill will call `npx -y @life-os/cli` as needed.
