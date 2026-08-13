@@ -7,7 +7,7 @@ load this when you need an exact flag, output shape, or error meaning.
 
 - **Invocation**: run via `npx -y @life-os/cli <command> …` (npx fetches the
   published package on first use; `-y` skips the prompt). The command names below
-  (`config`, `tasks`, …) are the `<command>` argument, e.g.
+  (`config`, `profile`, `tasks`, …) are the `<command>` argument, e.g.
   `npx -y @life-os/cli tasks due=today`.
 - **Options**: `key=value` (or `--key=value`). **Flags**: `--json`, or bare
   `overwrite` / `case`. Quote values containing spaces.
@@ -24,8 +24,14 @@ Resolved in order, first match wins:
 
 1. `vault=<path>` option (`~` is expanded; relative paths resolve against cwd)
 2. `$LIFEOS_VAULT` environment variable
-3. Walk up from the current directory for a folder containing `.obsidian/` or `.lifeos/`
+3. Walk up from the current directory for a folder containing `.obsidian/`,
+   `.lifeos/`, or `.agents/skills/lifeos/`
 4. The folder Aino last opened (`<userData>/bootstrap.json` → `lastOpenedFolder`)
+
+`onboard` intentionally differs at the last step: when no workspace marker is
+found, it uses the current directory instead of Aino's last-opened folder. This
+makes an empty local folder safe to initialize. Pass `vault=<path>` whenever the
+target is not the current directory.
 
 `config` reports which one was used via `Found by` / `discoveredVia`.
 
@@ -45,8 +51,28 @@ earlier), the same set the plugin and Aino use:
 ### `config`
 
 Show the resolved vault, how it was found, the config source files applied, and
-key effective settings (PARA folders, periodic base, daily path format, and the
-daily template path used when rendering a missing daily note). `--json` → `{ vault: {root, discoveredVia}, sources: string[], settings }`.
+key LifeOS settings (PARA folders, periodic base, daily path format, and the daily
+template path used when rendering a missing daily note). For the final daily note
+path, use `daily` itself: it also considers Obsidian Daily Notes core settings.
+`--json` → `{ vault: {root, discoveredVia}, sources: string[], settings }`.
+
+### `profile`
+
+Detect the vault's template profile. The detector reads
+`.lifeos/template-profile.json` first when present, then falls back to settings,
+folders, key files and tag vocabulary.
+
+Built-in profiles:
+
+- `para`: projects / areas / resources / archives.
+- `ipo`: input -> theme processing -> output.
+- `gtd`: inbox -> next actions / waiting / someday / review.
+- `opc`: OPC LifeOS one-person-company template; use the `opc` skill.
+- `custom` / `unknown`: use generic LifeOS rules unless the vault provides its
+  own skill.
+
+`--json` →
+`{ vault, profile, confidence, score, evidence, warnings, requiredSkills, recommendedReferences, manifest?, settingsSources }`.
 
 ### `tasks [todo|done|all]`
 
@@ -57,6 +83,7 @@ List tasks. Positional status defaults to `todo`.
 | `tag=<tag>`                | tasks tagged `<tag>` (matches the tag and its sub-tags `<tag>/...`) |
 | `keyword=<text>`           | substring match on task text                                        |
 | `due=today\|week\|overdue` | filter by **due date**; status still applies (default hides done)   |
+| `completed=this-week`      | filter done/all tasks by **completion date**, not due date          |
 | `limit=<n>`                | max rows (default 50)                                               |
 | `--json`                   | `{ totalCount, count, items: TaskItem[] }`                          |
 
@@ -65,6 +92,30 @@ Human line: `[ ]|[x] <text>  (due <date>  !<priority>  #<tags>)  — <file>:<lin
 
 Notes: `due=*` over-fetches and post-filters by status, so a completed task with a
 past due date is hidden unless you ask for `done`/`all`.
+`completed=this-week` is accepted only with `tasks done` or `tasks all`; use it
+when asking what was actually completed this calendar week.
+
+### `recent [range=<named-range>]`
+
+List Markdown files with durable created/modified evidence in a date range.
+Named ranges are `today`, `this-calendar-week`/`this-week`,
+`last-calendar-week`/`last-week`, `rolling-7-days`, and `this-month`.
+Explicit `dateFrom=YYYY-MM-DD` and `dateTo=YYYY-MM-DD` override the named range;
+`limit=` is capped at 100. `--json` uses the shared LifeOS agent result envelope
+and returns `data.range` plus `data.items`.
+
+Each item has `path`, `changedAt`, `changeType` (`created`, `modified`, or
+`unknown`) and `source`. A CLI-only filesystem mtime cannot prove file birth, so
+it is reported as `unknown`, never guessed as `created`.
+
+### `review:weekly [date=YYYY-MM-DD]`
+
+Build a single source-backed weekly review bundle using the configured week
+start. It includes the resolved weekly note, tasks completed by completion time,
+open/due tasks, weekly bullets, and recent files. `--json` uses the shared result
+envelope. Prefer this command over composing `weekly` with
+`tasks done due=week`: `due=week` means due date and cannot answer what was
+completed during the week.
 
 ### `search query=<text>`
 
@@ -84,14 +135,18 @@ stops at `limit`.
 
 Print a note. `path=` is exact (vault-relative); `file=` resolves a loose name via
 the index and errors if ambiguous (lists candidates). `.md` is added if omitted.
+Explicit `.md`, `.markdown`, `.html` and `.htm` extensions are preserved.
 `--json` → `{ filePath, content }`.
 
 ### Periodic notes: `daily | weekly | monthly | quarterly | yearly`
 
-Resolve the note path from `periodicNotesPath` + the per-type format
-(`periodicNotesPathFormat<Type>`, falling back to LifeOS defaults), using the same
-formatter as the plugin/Aino (ISO weeks for weekly). Weekday/month name tokens
-(`dddd`/`MMMM`) honor `locale=` (default: system locale).
+Resolve the note path with the same formatter as the plugin/Aino (ISO weeks for
+weekly). For `daily`, `.obsidian/daily-notes.json` wins when present:
+`folder` is the base path and `format` is the date path template, so formats like
+`MM/YYYY-MM-DD` correctly create month subfolders. Other periods use
+`periodicNotesPath` + `periodicNotesPathFormat<Type>` from LifeOS settings,
+falling back to LifeOS defaults. Weekday/month name tokens (`dddd`/`MMMM`) honor
+`locale=` (default: system locale).
 
 | Form                             | Effect                                                                                                                                          |
 | -------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -103,13 +158,14 @@ formatter as the plugin/Aino (ISO weeks for weekly). Weekday/month name tokens
 | `date=YYYY-MM-DD`                | target a specific period (default: today)                                                                                                       |
 | `locale=<bcp47>`                 | locale for name tokens, e.g. `zh-CN`                                                                                                            |
 
-Template resolution: `periodicNotesTemplateFilePath<Type>` if set, else
-`<periodicNotesPath>/Templates/<Type>.md`, else a built-in default. The template is
-rendered with the shared engine: `{{snapshot:Project}}` → numbered `[[index|name]]`
-list of PARA sub-folders that have an index note; `{{if weekday}}…{{endif}}`,
-`{{date}}`, `{{date+N:FORMAT}}`, `{{title}}` are expanded; unknown `{{…}}` (LifeOS
-query blocks) are left verbatim. `:create`/`:append` `--json` adds `created` /
-`templatePath`.
+Template resolution: for `daily`, Obsidian Daily Notes core `template` wins when
+set; otherwise `periodicNotesTemplateFilePath<Type>` if set, else
+`<periodicNotesPath>/Templates/<Type>.md`, else a built-in default. The template
+is rendered with the shared engine: `{{snapshot:Project}}` → numbered
+`[[index|name]]` list of PARA sub-folders that have an index note;
+`{{if weekday}}…{{endif}}`, `{{date}}`, `{{date+N:FORMAT}}`, `{{title}}` are
+expanded; unknown `{{…}}` (LifeOS query blocks) are left verbatim.
+`:create`/`:append` `--json` adds `created` / `templatePath`.
 
 Every form echoes the resolved path. `<period> read` / `<period>:read` are both
 accepted.
@@ -135,8 +191,10 @@ the end of the file if the header is missing. `--json` →
 
 ### `create path=<vault/rel/path> [content=<text>] [overwrite]`
 
-Create a note (parent folders auto-created, `.md` added if omitted). Errors if it
-exists unless `overwrite`. `--json` → `{ ok, filePath, created }`.
+Create a note or dashboard file. Parent folders are auto-created; `.md` is added
+when the path has no recognised extension. Explicit `.md`, `.markdown`, `.html`
+and `.htm` extensions are preserved. Errors if it exists unless `overwrite`.
+`--json` → `{ ok, filePath, created }`.
 
 ### `task done|todo ref=<file>:<line>`
 
@@ -144,12 +202,60 @@ Toggle one task's checkbox. `ref` is the `file:line` printed by `tasks` (only th
 trailing `:<digits>` is the line number, so paths with colons are fine).
 `--json` → `{ ok, filePath, action }`.
 
-### `skill install [vault=<path>]`
+### `onboard`
+
+Initialize or migrate any local Markdown folder. `.obsidian/` is optional.
+
+| Form                                                                      | Effect                                                                                                                                          |
+| ------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| `onboard inspect [vault=<path>] [--json]`                                 | Inventory `.md`, `.markdown`, common attachment types, metadata, Skill status, and detected profile without reading binary attachment contents. |
+| `onboard templates [locale=en\|zh-cn\|zh-tw] [--json]`                    | List the exact Memos, IPO, GTD, and PARA directory structures and root bootstrap Agent Files; does not require a vault.                         |
+| `onboard plan profile=<p> [density=minimal\|full] [locale=…]`             | Preview creates, skips, and conflicts, including profile-specific bootstrap Agent Files; JSON exposes target conflict content; never writes.    |
+| `onboard apply profile=<p> [density=…] [locale=…]`                        | Apply the previewed template and missing bootstrap Agent Files without overwriting conflicts.                                                   |
+| `onboard status [--json]`                                                 | Read resumable state from `.lifeos/onboarding.json`.                                                                                            |
+| `onboard verify [--json]`                                                 | Verify metadata, Skill, and detected profile.                                                                                                   |
+| `onboard classify-input profile=<p> [locale=…] [scope=<path>] [limit=30]` | Return a bounded batch of scattered files for semantic classification.                                                                          |
+| `onboard classify-plan file=<json> [--json]`                              | Validate a reviewed classification plan without moving files.                                                                                   |
+| `onboard classify-apply file=<json> [--json]`                             | Move the confirmed safe subset and report conflicts separately.                                                                                 |
+
+Profiles are `memos`, `ipo`, `gtd`, or `para`. The aliases `topic` and `topic-only`
+normalize to `ipo`; Topic-only mode is not a separate stored profile. Use the
+separate `opc` skill for OPC.
+`minimal` creates the operational structure and starter entry points. For Memos,
+it also creates the essential empty Daily template. `full` adds the longer-period
+review templates. Memos cannot be used with `classify-*` because it has no
+taxonomy destination folders.
+
+All profiles include root `AGENTS.md`, `SOUL.md`, and `STYLE.md` with
+profile-specific content in the requested locale. `MEMORY.md` is an optional,
+free-form durable-memory file created only after an explicit remember request; it
+is never generated, upgraded, or rewritten by onboarding. Existing bootstrap
+Agent Files are conflicts and remain unchanged; `AGENT.md` and `CLAUDE.md` are
+not generated.
+
+Classification plan suggestions contain `source`, `destinationDirectory`,
+`confidence`, `reason`, `evidence`, and `confirmed`. Only confirmed items are
+eligible to move. Validation rejects paths outside the workspace, destinations
+outside the selected profile, missing sources, same-name/case-equivalent
+collisions, and moves that could break Markdown or attachment links.
+
+When the detected profile differs from the requested target, use
+`references/template-migration.md`. The target content in `conflictEntries` is
+comparison input only; `onboard apply` never merges or overwrites it.
+
+### `skill status|install [vault=<path>]`
+
+`skill status` reports whether the vault copy is missing, legacy, invalid,
+outdated, current, or newer than the CLI bundle. It also checks the managed-file
+fingerprint and reports local changes. Add `--json` for structured output.
 
 Install or update the bundled LifeOS agent skill into
 `.agents/skills/lifeos/` inside the resolved vault. The command overwrites
 `SKILL.md` and `references/` with the files embedded in the current
 `@life-os/cli` package, so it is the upgrade path after installing a newer CLI.
+Legacy or locally modified managed files are backed up below
+`.agents/skills/lifeos/.backup/` before replacement. A newer installed version
+is never downgraded.
 
 ### `help`, `version`
 
@@ -168,7 +274,7 @@ Surfaced as readable text with exit code 1. Common cases:
 | path escapes vault             | `Refusing to touch a path outside the vault.`                     |
 | `task` ref not a checkbox line | `That line is not a \`- [ ]\` / \`- [x]\` task.`                  |
 | bad `due=` / `date=` value     | explains the accepted values                                      |
-| no vault found                 | explains the four resolution options                              |
+| no vault found                 | explains explicit path, env, cwd markers, and Aino fallback       |
 
 ---
 

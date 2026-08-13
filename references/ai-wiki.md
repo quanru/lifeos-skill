@@ -76,7 +76,7 @@ Body convention — **required** sections (in this order):
 - 学到:<takeaway worth keeping>
   (short, specific. If a phase just ended, anchor to the period.)
 
-## 下一步建议
+## 下一步行动
 
 - [优先级] <具体动作> — <时间感:本周/本月/下季>
 - [优先级] <具体动作> — <时间感>
@@ -85,7 +85,7 @@ Body convention — **required** sections (in this order):
   not just summarise it.)
 ```
 
-The last two sections — **复盘 / 下一步建议** — are what make this a
+The last two sections — **复盘 / 下一步行动** — are what make this a
 working wiki instead of an archive. Without them the page just summarises
 the past; with them it steers the topic.
 

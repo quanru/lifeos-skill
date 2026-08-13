@@ -1,21 +1,35 @@
-# lifeos-skill
+# LifeOS Skill
 
-Agent skill for working with a [LifeOS / Obsidian PARA vault](https://lifeos.md/)
-through the public `@life-os/cli` command-line tool.
+[English](README.md) | [简体中文](README.zh-CN.md)
 
-The skill teaches coding agents how to read, search, append to, and update
-LifeOS notes, tasks, periodic notes, PARA theme notes, tags, and LifeOS AI Wiki
-pages without opening Obsidian or Aino.
+An agent skill for reading, organizing, and evolving a local Markdown knowledge
+base with LifeOS. It works headlessly through `@life-os/cli`, so Obsidian or
+Aino does not need to be open.
 
-## Features
+## Use it with LifeOS
 
-- Uses `npx -y @life-os/cli`, so no global CLI install is required
-- Works with the user's real vault settings, PARA folders, templates, and
-  periodic-note formats
-- Covers common workflows such as daily capture, task review, theme-note
-  creation, periodic review, note search, safe task toggling, and LifeOS AI Wiki
-  `.AI.md` topic-page maintenance
-- Includes command and AI Wiki references in `references/`
+- **In Obsidian:** follow the [LifeOS Skill guide](https://lifeos.md/zh/guide/ai-integration/lifeos-skill).
+- **In Aino:** follow the [Aino LifeOS Skill guide](https://aino.md/zh/guide/ai/lifeos-skill.html).
+
+## Capabilities
+
+- Read settings, search notes, capture ideas, manage tasks, and create daily,
+  weekly, monthly, quarterly, and yearly notes with the user's real templates.
+- Build a source-backed weekly review from completed tasks, open work, weekly
+  bullets, and recently changed files instead of guessing from due dates.
+- Initialize an empty folder or take over an existing Markdown knowledge base;
+  choose Memos, IPO / Topic-only, GTD, or PARA, then preview every write.
+- Migrate between LifeOS templates in reviewed, resumable batches while
+  preserving custom settings, links, attachments, and user-authored rules.
+- Add tags and other properties to PDF, image, audio, video, Office, and other
+  non-Markdown attachments through hidden sibling metadata files.
+- Maintain topic-level `.AI.md` pages for LifeOS AI Wiki and generate standalone
+  sibling HTML dashboards for projects, areas, resources, and other themes.
+- Create `AGENTS.md`, `SOUL.md`, and `STYLE.md` when onboarding a knowledge base.
+  `MEMORY.md` stays optional and is only created or edited after an explicit
+  request to remember something.
+- Use native, confirmation-gated tools in Aino Mobile. Mobile users do not need
+  Node.js or shell commands.
 
 ## Installation
 
@@ -23,39 +37,61 @@ pages without opening Obsidian or Aino.
 npx skills add quanru/lifeos-skill
 ```
 
-For Codex project-local installation:
+For a project-local Codex installation:
 
 ```bash
 npx skills add quanru/lifeos-skill -a codex
 ```
 
-## Usage
+## Try it
 
-In your coding agent, ask for LifeOS vault work:
+Ask your agent in natural language:
 
 ```text
 What is on my LifeOS task list today?
 ```
 
 ```text
-Add this thought to today's daily note: ...
+Review this week using completed tasks and recently changed notes.
 ```
 
 ```text
-Create a project note for my quarterly planning work.
+Help me set up or take over this knowledge base. Show the plan before writing.
 ```
 
 ```text
-Update AI Wiki for every topic under 2 Projects/
+Add the tag #contract and status "signed" to Assets/Agreement.pdf.
 ```
 
-The skill will call `npx -y @life-os/cli` as needed.
+```text
+Generate an HTML dashboard beside my quarterly-planning project note.
+```
 
-## Prerequisites
+## Update
 
-- Node.js 18+
-- A [LifeOS / Obsidian PARA vault](https://lifeos.md/) accessible on disk
-- `@life-os/cli` available through npm, invoked by the skill with `npx -y`
+Re-run the installation command to refresh the repository version. For a copy
+installed inside a LifeOS vault, the LifeOS CLI can inspect and update it:
+
+```bash
+npx -y @life-os/cli skill status
+npx -y @life-os/cli skill install
+```
+
+Locally modified managed files are backed up before replacement, and a newer
+installed skill is never downgraded.
+
+## Requirements
+
+- A local folder containing Markdown notes, or an empty folder to initialize
+- Node.js 18+ for CLI-based agents
+- No Node.js requirement when the skill runs through Aino Mobile native tools
+
+## Safety model
+
+Onboarding and migrations inspect and preview before writing. Files move only
+after explicit confirmation and validation of path boundaries, name collisions,
+Markdown links, Wikilinks, and attachment references. Binary attachment content
+is not treated as understood unless a separate tool actually extracts it.
 
 ## License
 
