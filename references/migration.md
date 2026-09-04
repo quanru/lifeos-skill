@@ -17,6 +17,15 @@ the periodic-note directory and add the target taxonomy; do not move old daily
 notes. For OPC, switch to the separate `opc` skill and normally migrate into an
 OPC Blank Vault.
 
+## Contents
+
+- [Safety contract](#safety-contract)
+- [Build a bounded batch](#build-a-bounded-batch)
+- [Propose destinations](#propose-destinations)
+- [Save and validate the reviewed plan](#save-and-validate-the-reviewed-plan)
+- [Apply the confirmed safe subset](#apply-the-confirmed-safe-subset)
+- [Pasted text](#pasted-text)
+
 ## Safety contract
 
 - Inventory and semantic classification are separate steps.

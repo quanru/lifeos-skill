@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>主题名 Dashboard</title>
+    <style>
+      :root {
+        color-scheme: light dark;
+        --bg: #f6f4ef;
+        --panel: #fffdf8;
+        --panel-soft: #f2eee4;
+        --text: #20252d;
+        --muted: #667085;
+        --line: #d9d1c3;
+        --accent: #246a8d;
+        --accent-2: #1f8a70;
+        --warn: #b58121;
+        --bad: #c7513f;
+        --good: #247a4d;
+        --shadow: 0 16px 40px rgba(32, 37, 45, 0.08);
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #111418;
+          --panel: #1b2027;
+          --panel-soft: #242b34;
+          --text: #eef2f7;
+          --muted: #aab3c1;
+          --line: #343c49;
+          --accent: #7ab7d8;
+          --accent-2: #73d3b5;
+          --warn: #f1c56b;
+          --bad: #ff8f80;
+          --good: #88d7a8;
+          --shadow: 0 16px 40px rgba(0, 0, 0, 0.24);
+        }
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background:
+          linear-gradient(var(--line) 1px, transparent 1px), linear-gradient(90deg, var(--line) 1px, transparent 1px),
+          var(--bg);
+        background-size: 32px 32px;
+        color: var(--text);
+        font-family:
+          Inter,
+          ui-sans-serif,
+          system-ui,
+          -apple-system,
+          BlinkMacSystemFont,
+          'Segoe UI',
+          sans-serif;
+        line-height: 1.55;
+      }
+      .dashboard {
+        width: min(1180px, calc(100% - 32px));
+        margin: 0 auto;
+        padding: 28px 0 42px;
+      }
+      .topbar,
+      .panel,
+      .signal {
+        background: color-mix(in srgb, var(--panel) 94%, transparent);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        box-shadow: var(--shadow);
+      }
+      .topbar {
+        padding: 22px;
+      }
+      .eyebrow,
+      .meta,
+      .label {
+        color: var(--muted);
+        font-size: 12px;
+      }
+      h1,
+      h2,
+      h3,
+      p {
+        margin: 0;
+      }
+      h1 {
+        margin: 6px 0 10px;
+        font-size: clamp(30px, 4vw, 52px);
+        letter-spacing: 0;
+      }
+      h2 {
+        margin-bottom: 12px;
+        font-size: 18px;
+      }
+      h3 {
+        margin-bottom: 6px;
+        font-size: 14px;
+      }
+      .pills {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 16px;
+      }
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        max-width: 100%;
+        padding: 4px 9px;
+        overflow-wrap: anywhere;
+        color: var(--muted);
+        font-size: 12px;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(12, minmax(0, 1fr));
+        gap: 14px;
+        margin-top: 14px;
+      }
+      .panel {
+        padding: 16px;
+      }
+      .span-3 {
+        grid-column: span 3;
+      }
+      .span-4 {
+        grid-column: span 4;
+      }
+      .span-6 {
+        grid-column: span 6;
+      }
+      .span-8 {
+        grid-column: span 8;
+      }
+      .span-12 {
+        grid-column: span 12;
+      }
+      .signals {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 10px;
+      }
+      .signal {
+        padding: 12px;
+        box-shadow: none;
+      }
+      .metric {
+        font-size: 28px;
+        font-weight: 750;
+      }
+      .list {
+        display: grid;
+        gap: 10px;
+        padding: 0;
+        margin: 0;
+        list-style: none;
+      }
+      .item {
+        padding: 10px 10px 10px 12px;
+        background: var(--panel-soft);
+        border-left: 3px solid var(--accent);
+        border-radius: 6px;
+      }
+      .item.risk {
+        border-left-color: var(--bad);
+      }
+      table {
+        width: 100%;
+        font-size: 14px;
+        border-collapse: collapse;
+      }
+      th,
+      td {
+        padding: 10px 8px;
+        text-align: left;
+        vertical-align: top;
+        border-bottom: 1px solid var(--line);
+      }
+      th {
+        color: var(--muted);
+        font-size: 12px;
+        font-weight: 650;
+      }
+      @media (max-width: 760px) {
+        .dashboard {
+          width: min(100% - 20px, 680px);
+          padding-top: 16px;
+        }
+        .grid,
+        .signals {
+          grid-template-columns: 1fr;
+        }
+        .span-3,
+        .span-4,
+        .span-6,
+        .span-8,
+        .span-12 {
+          grid-column: 1;
+        }
+        table {
+          display: block;
+          overflow-x: auto;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="dashboard">
+      <section class="topbar">
+        <div class="eyebrow">LifeOS Theme Dashboard</div>
+        <h1>主题名</h1>
+        <p>一句话说明这个主题当前为什么重要，以及 dashboard 帮用户判断什么。</p>
+        <div class="pills" aria-label="Theme metadata">
+          <span class="pill">Tag: #主题标签</span>
+          <span class="pill">Type: Project / Area / Resource / Archive</span>
+          <span class="pill">Source: 主题索引.md</span>
+          <span class="pill">Theme: Obsidian system</span>
+          <span class="pill">Generated: YYYY-MM-DD</span>
+        </div>
+      </section>
+
+      <section class="grid" aria-label="Dashboard overview">
+        <article class="panel span-8">
+          <h2>当前状态</h2>
+          <p>基于主题索引、AI Wiki、任务/闪念/文件索引和同目录材料，总结当前状态。</p>
+        </article>
+
+        <article class="panel span-4">
+          <h2>关键判断</h2>
+          <p>当前最重要的判断或决策框架。没有证据时明确写缺少什么。</p>
+        </article>
+
+        <article class="panel span-12">
+          <h2>索引信号</h2>
+          <div class="signals">
+            <div class="signal">
+              <div class="label">TaskListByTag</div>
+              <div class="metric">0</div>
+              <p class="meta">No indexed task found</p>
+            </div>
+            <div class="signal">
+              <div class="label">BulletListByTag</div>
+              <div class="metric">0</div>
+              <p class="meta">No tagged fleeting note found</p>
+            </div>
+            <div class="signal">
+              <div class="label">FileListByTag</div>
+              <div class="metric">0</div>
+              <p class="meta">No tagged file found</p>
+            </div>
+          </div>
+        </article>
+
+        <article class="panel span-6">
+          <h2>下一步行动</h2>
+          <ul class="list">
+            <li class="item">
+              <strong>[P1] 具体行动</strong>
+              <p class="meta">时间范围 · 负责人或来源 · 相关任务/笔记链接</p>
+            </li>
+            <li class="item">
+              <strong>[P2] 候选行动</strong>
+              <p class="meta">理由/证据 · 复查时机 · 缺失信息或验证方式</p>
+            </li>
+          </ul>
+        </article>
+
+        <article class="panel span-6">
+          <h2>风险与阻塞</h2>
+          <ul class="list">
+            <li class="item risk">
+              <strong>风险</strong>
+              <p class="meta">影响 · 触发信号 · 应对方式</p>
+            </li>
+          </ul>
+        </article>
+
+        <article class="panel span-6">
+          <h2>近期活动</h2>
+          <p class="meta">No dated milestone found</p>
+        </article>
+
+        <article class="panel span-12">
+          <h2>材料地图</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>材料</th>
+                <th>作用</th>
+                <th>证据 / 路径</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>关键笔记</td>
+                <td>为什么重要</td>
+                <td>主题文件夹/Note.md</td>
+              </tr>
+            </tbody>
+          </table>
+        </article>
+      </section>
+    </main>
+  </body>
+</html>

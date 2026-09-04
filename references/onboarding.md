@@ -4,6 +4,12 @@ Use this workflow for an empty folder, an existing Markdown folder, a pasted
 collection of notes, or a folder being taken over from another knowledge tool.
 The folder does not need `.obsidian/`.
 
+## Contents
+
+- [Operating rules](#operating-rules)
+- [State machine](#state-machine)
+- [Recovery](#recovery)
+
 ## Operating rules
 
 - Ask one consequential question at a time.
@@ -59,7 +65,7 @@ The folder does not need `.obsidian/`.
    pages immediately; Memos `minimal` still includes its essential empty Daily
    template. Use the user's writing language for generated folders, starter
    notes, and root Agent Files; this does not change the English Skill files
-   installed under `.agents/skills/lifeos/`.
+   installed under `.agents/skills/`.
 
 5. **Preview**
 

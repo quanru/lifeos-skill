@@ -2,8 +2,12 @@
 
 [English](README.md) | [简体中文](README.zh-CN.md)
 
-一个帮助 Agent 读取、整理和持续演进本地 Markdown 知识库的 LifeOS
-Skill。它通过 `@life-os/cli` 无头运行，不需要先打开 Obsidian 或 Aino。
+一个帮助 Agent 读取、整理和持续演进本地 Markdown 知识库的 LifeOS Skill。
+它通过 `@life-os/cli` 无头运行，不需要先打开 Obsidian 或 Aino。
+
+GitHub 发行版把最新的核心、今日、看板、接管和内容工作流合并成一个扁平 Skill，
+以兼容更多导入器。LifeOS CLI 会把相同行为安装成五个聚焦的 Skill，让 Agent
+每次只加载当前任务所需的领域能力。
 
 ## 在 LifeOS 中使用
 
@@ -22,6 +26,14 @@ Skill。它通过 `@life-os/cli` 无头运行，不需要先打开 Obsidian 或 
 - 在 Aino Mobile 中使用需要确认的原生工具，不要求用户安装 Node.js 或执行 shell 命令。
 
 ## 安装
+
+把完整的五 Skill Bundle 安装到当前 LifeOS Vault：
+
+```bash
+npx -y @life-os/cli@latest skill install
+```
+
+安装扁平的 GitHub Skill 包：
 
 ```bash
 npx skills add quanru/lifeos-skill
@@ -59,15 +71,15 @@ npx skills add quanru/lifeos-skill -a codex
 
 ## 更新
 
-重新执行安装命令即可刷新 GitHub 仓库版本。对于已经安装在 LifeOS Vault
-内部的副本，可以用 LifeOS CLI 检查并更新：
+使用 LifeOS CLI 检查并原子更新全部五个 Skill：
 
 ```bash
 npx -y @life-os/cli skill status
 npx -y @life-os/cli skill install
 ```
 
-更新前会备份被本地修改过的受管文件，也不会把更高版本的 Skill 降级。
+更新前会按 Skill 备份被本地修改过的受管文件；旧版单 Skill 安装会自动迁移，
+过时的受管文件会在备份后清理，也不会把更高版本的 Bundle 降级。
 
 ## 要求
 

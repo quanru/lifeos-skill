@@ -3,6 +3,17 @@
 Exhaustive reference for the `lifeos` CLI. The SKILL.md covers the common path;
 load this when you need an exact flag, output shape, or error meaning.
 
+## Contents
+
+- [Conventions](#conventions)
+- [Vault selection](#vault-selection)
+- [Settings sources](#settings-sources)
+- [Commands](#commands)
+- [Common command chains](#common-command-chains)
+- [Errors](#errors)
+- [Performance](#performance-5k-note-vault)
+- [Out of scope](#out-of-scope)
+
 ## Conventions
 
 - **Invocation**: run via `npx -y @life-os/cli <command> …` (npx fetches the
@@ -94,6 +105,43 @@ Notes: `due=*` over-fetches and post-filters by status, so a completed task with
 past due date is hidden unless you ask for `done`/`all`.
 `completed=this-week` is accepted only with `tasks done` or `tasks all`; use it
 when asking what was actually completed this calendar week.
+
+### `today [date=YYYY-MM-DD]`
+
+Build the source-backed AI Today view without opening Aino Desktop. `date=`
+defaults to the local current date. `limit=` caps returned task rows (default
+50); `recentLimit=` caps each recent file group (default 6).
+
+`--json` uses the shared LifeOS agent result envelope. `data` contains:
+
+- `date`
+- `summary`: `pendingCount`, `overdueCount`, `timedCount`, `completedCount`
+- `tasks`: `pending`, `timed`, and `completed`
+- `recent`: `captures`, `projects`, and `outputs`
+- `sources`: exact task/file references used to build the view
+
+Pending work includes open tasks due on or before the selected date. Completed
+work uses the task completion date, not its due date. Workflow folders honor
+the effective vault settings: PARA vaults use captures/projects/expresses;
+non-PARA vaults use inputs/themes/outputs.
+
+### `board [mode=workflow|para]`
+
+Build the source-backed AI board view without opening Aino Desktop. The mode
+defaults to `workflow` and can also be supplied positionally (`board para`).
+`limit=` caps returned items per column (default 20) while `totalCount` keeps the
+full column count. The result envelope sets `truncated=true` when any column was
+capped.
+
+- `workflow`: Input, Projects, open Tasks, Output
+- `para`: Projects, Areas, Resources, Archives
+
+`data.columns[]` contains `key`, `label`, optional configured `path`,
+`totalCount`, and bounded `items`. File items distinguish direct files from
+collapsed top-level folders and expose a readable `sourcePath`; task items
+include their exact `file` and `line`.
+Use envelope `sources` to ground analysis. A board read never moves or edits
+files.
 
 ### `recent [range=<named-range>]`
 
@@ -240,7 +288,7 @@ outside the selected profile, missing sources, same-name/case-equivalent
 collisions, and moves that could break Markdown or attachment links.
 
 When the detected profile differs from the requested target, use
-`references/template-migration.md`. The target content in `conflictEntries` is
+`../../lifeos-onboarding/references/template-migration.md`. The target content in `conflictEntries` is
 comparison input only; `onboard apply` never merges or overwrites it.
 
 ### `skill status|install [vault=<path>]`
@@ -249,17 +297,75 @@ comparison input only; `onboard apply` never merges or overwrites it.
 outdated, current, or newer than the CLI bundle. It also checks the managed-file
 fingerprint and reports local changes. Add `--json` for structured output.
 
-Install or update the bundled LifeOS agent skill into
-`.agents/skills/lifeos/` inside the resolved vault. The command overwrites
-`SKILL.md` and `references/` with the files embedded in the current
-`@life-os/cli` package, so it is the upgrade path after installing a newer CLI.
-Legacy or locally modified managed files are backed up below
-`.agents/skills/lifeos/.backup/` before replacement. A newer installed version
-is never downgraded.
+Install or update the complete LifeOS Skill bundle under `.agents/skills/` in
+the resolved vault. The bundle contains `lifeos`, `lifeos-today`,
+`lifeos-board`, `lifeos-onboarding` and `lifeos-content`. The command writes the
+files embedded in the current `@life-os/cli` package, so it is the upgrade path
+after installing a newer CLI. Legacy or locally modified managed files are
+backed up below `.agents/skills/lifeos/.backup/` before replacement; obsolete
+files from the former single-Skill layout are then removed. A newer installed
+bundle is never downgraded.
 
 ### `help`, `version`
 
 Print usage / version.
+
+---
+
+## Common command chains
+
+### Find then act
+
+Read or locate the exact target before a mutation:
+
+```bash
+npx -y @life-os/cli tasks keyword="季度报告"
+npx -y @life-os/cli task done ref="0. 周期笔记/2025/Daily/05/2025-05-30.md:14"
+```
+
+### Research a topic
+
+```bash
+npx -y @life-os/cli search query="超线性回报" type=content limit=20
+npx -y @life-os/cli read path="-1. 捕获/相关笔记.md"
+```
+
+### Tag a non-Markdown attachment
+
+Derive the hidden sibling path mechanically, then read, validate and merge
+instead of overwriting unknown Frontmatter:
+
+```bash
+npx -y @life-os/cli read path="Assets/.合同.pdf.md" --json
+npx -y @life-os/cli create path="Assets/.合同.pdf.md" content="<完整合并后的 Frontmatter>" overwrite
+```
+
+A missing card is expected when the attachment has never received metadata.
+Create it only after the user requested a property change and follow
+`../../lifeos-content/references/attachment-cards.md` for the full identity and
+conflict rules.
+
+### Generate a theme dashboard
+
+```bash
+npx -y @life-os/cli read path="4 资源/学日语/学日语.md"
+npx -y @life-os/cli read path="4 资源/学日语/学日语.AI.md"
+npx -y @life-os/cli create path="4 资源/学日语/学日语.html" content="<full html>" overwrite
+```
+
+The `.AI.md` read may legitimately report a missing file. Before writing, load
+`../../lifeos-content/references/theme-dashboard.md`, gather the high-signal sources it requires and
+preserve the same-directory same-basename path rule.
+
+### Weekly review
+
+```bash
+npx -y @life-os/cli review:weekly --json
+```
+
+Show the sourced review before proposing a write. Append the synthesized review
+only after explicit confirmation. For capture and periodic-note examples, use
+`../../lifeos-today/references/periodic-notes.md`.
 
 ---
 

@@ -45,7 +45,8 @@ names.
 
 ## Dashboard Focus
 
-For PARA theme dashboards, use `references/theme-dashboard.md` and emphasise:
+For PARA theme dashboards, use
+`../../lifeos-content/references/theme-dashboard.md` and emphasise:
 
 - theme identity and tag;
 - current state and key judgment;

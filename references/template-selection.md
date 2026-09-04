@@ -15,6 +15,16 @@ Memos -> IPO -> GTD -> PARA -> OPC
 This is a complexity ladder, not a mandatory migration route. A user with a
 clear bottleneck may skip directly to the matching template.
 
+## Contents
+
+- [Memos](#memos)
+- [IPO](#ipo)
+- [GTD](#gtd)
+- [PARA](#para)
+- [OPC](#opc)
+- [Decision shortcut](#decision-shortcut)
+- [Complexity and upgrade path](#complexity-and-upgrade-path)
+
 ## Memos
 
 Choose Memos when the first need is frictionless chronological capture: daily

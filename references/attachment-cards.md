@@ -3,6 +3,14 @@
 Use this reference when the user asks to tag or set properties on a PDF, image,
 audio, video, Office document, HTML file, or another non-Markdown attachment.
 
+## Contents
+
+- [Protocol](#protocol)
+- [Safe write workflow](#safe-write-workflow)
+- [Hidden files](#hidden-files)
+- [Moves and renames](#moves-and-renames)
+- [Aino Mobile](#aino-mobile)
+
 ## Protocol
 
 Derive the hidden metadata Markdown path from the exact attachment path:

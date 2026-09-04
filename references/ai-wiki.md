@@ -8,6 +8,15 @@ create, update, query and lint those pages.
 Use it whenever the user asks you to "整理一下 X 主题"、"更新 AI Wiki"、
 "看看 AI Wiki 怎么说" or anything similar.
 
+## Contents
+
+- [Source scope](#source-scope)
+- [Wiki page schema](#wiki-page-schema)
+- [Ingest flow](#ingest-flow)
+- [Query flow](#query-flow)
+- [Lint flow](#lint-flow)
+- [Out of scope](#out-of-scope)
+
 ## Source scope
 
 Original source files stay in the existing PARA structure:

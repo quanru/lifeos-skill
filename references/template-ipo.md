@@ -41,7 +41,7 @@ material over broad keyword sweeps.
 
 ## Dashboard Focus
 
-Use `references/theme-dashboard.md` for the HTML path and visual contract, then
+Use `../../lifeos-content/references/theme-dashboard.md` for the HTML path and visual contract, then
 shape the modules around the IPO flow:
 
 - input queue: important raw materials and their source;

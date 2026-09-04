@@ -1,0 +1,4 @@
+interface:
+  display_name: 'LifeOS Core'
+  short_description: 'Configure and safely operate a LifeOS vault'
+  default_prompt: 'Use $lifeos to inspect and safely operate this LifeOS vault.'

@@ -8,6 +8,21 @@ Supported here: Memos, IPO / Topic-only, GTD, and PARA. For OPC, load the
 separate `opc` skill and normally migrate selected material into an OPC Blank
 Vault.
 
+## Contents
+
+- [Migration contract](#migration-contract)
+- [Create a migration record](#create-a-migration-record)
+- [Inspect and preview](#inspect-and-preview)
+- [Merge settings by field](#merge-settings-by-field)
+- [Migrate Agent Files](#migrate-agent-files-without-losing-user-context)
+- [Apply structure before moving content](#apply-structure-before-moving-content)
+- [Classify by meaning](#classify-by-meaning-not-source-folder)
+- [Exclude system and generated material](#exclude-system-and-generated-material)
+- [Links and attachments](#links-and-attachments)
+- [Execute in bounded batches](#execute-in-bounded-batches)
+- [Verify before changing the profile manifest](#verify-before-changing-the-profile-manifest)
+- [Recovery and reversal](#recovery-and-reversal)
+
 ## Migration contract
 
 Before writing, establish these facts:
