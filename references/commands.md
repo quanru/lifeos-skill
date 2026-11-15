@@ -26,7 +26,10 @@ load this when you need an exact flag, output shape, or error meaning.
   single JSON document on stdout.
 - **`content=` escapes**: in write commands (`append`, `create`, `<period>:append`)
   the `content=` value interprets `\n` `\t` `\r` `\\`, so you can write multi-line
-  content on one command line.
+  content on one command line. Use `--literal-content` to pass `content=`
+  unchanged, including backslashes, on CLI versions supporting this flag.
+- Before mutations, follow [write-safety.md](write-safety.md); literal backslashes
+  need escaping for the CLI as well as safe shell argument construction.
 - **Exit codes**: `0` success, `1` on any error. Error text is human-readable.
 
 ## Vault selection
@@ -59,6 +62,12 @@ earlier), the same set the plugin and Aino use:
 
 ## Commands
 
+### Product configuration
+
+`config schema|get|explain|plan|apply|reset|verify` operates on an explicit
+`target=lifeos-pro|aino-desktop`. See [configuration.md](configuration.md) for
+patches, credential references, offline limits and runtime verification.
+
 ### `config`
 
 Show the resolved vault, how it was found, the config source files applied, and
@@ -75,6 +84,7 @@ folders, key files and tag vocabulary.
 
 Built-in profiles:
 
+- `memos`: chronological capture and tasks in periodic notes.
 - `para`: projects / areas / resources / archives.
 - `ipo`: input -> theme processing -> output.
 - `gtd`: inbox -> next actions / waiting / someday / review.
@@ -177,7 +187,8 @@ completed during the week.
 | `--json`              | `{ type, query, count, items }`                         |
 
 Content matching is plain substring (not regex). It reads files on demand and
-stops at `limit`.
+stops at `limit`. Results are bounded, not a complete inventory; there is no
+pagination flag. `count` is returned rows, not the total number of matches.
 
 ### `read file=<name> | path=<vault/rel/path>`
 
@@ -196,15 +207,15 @@ weekly). For `daily`, `.obsidian/daily-notes.json` wins when present:
 falling back to LifeOS defaults. Weekday/month name tokens (`dddd`/`MMMM`) honor
 `locale=` (default: system locale).
 
-| Form                             | Effect                                                                                                                                          |
-| -------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
-| `<period>`                       | print `Type/Date/Path/Exists/Format`; `--json` adds `exists`                                                                                    |
-| `<period>:read`                  | print the note (errors if it doesn't exist)                                                                                                     |
-| `<period>:create [overwrite]`    | create the note from its configured template (rendered); errors if it exists unless `overwrite`                                                 |
-| `<period>:append content=<text>` | append; **creates the note from its template if missing**                                                                                       |
-| `section=<header>`               | insert at the end of that header's section (creates it if absent) instead of the file tail — e.g. `section="日常记录"` for daily-record logging |
-| `date=YYYY-MM-DD`                | target a specific period (default: today)                                                                                                       |
-| `locale=<bcp47>`                 | locale for name tokens, e.g. `zh-CN`                                                                                                            |
+| Form                             | Effect                                                                                                                                                                        |
+| -------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `<period>`                       | print `Type/Date/Path/Exists/Format`; `--json` adds `exists`                                                                                                                  |
+| `<period>:read`                  | print the note (errors if it doesn't exist)                                                                                                                                   |
+| `<period>:create [overwrite]`    | create the note from its configured template (rendered); errors if it exists unless `overwrite`                                                                               |
+| `<period>:append content=<text>` | append; **creates the note from its template if missing**                                                                                                                     |
+| `section=<header>`               | insert at the end of that header's direct body, before any child heading (creates it if absent) instead of the file tail — e.g. `section="日常记录"` for daily-record logging |
+| `date=YYYY-MM-DD`                | target a specific period (default: today)                                                                                                                                     |
+| `locale=<bcp47>`                 | locale for name tokens, e.g. `zh-CN`                                                                                                                                          |
 
 Template resolution: for `daily`, Obsidian Daily Notes core `template` wins when
 set; otherwise `periodicNotesTemplateFilePath<Type>` if set, else
@@ -221,18 +232,24 @@ accepted.
 ### `theme:create type=<t> tag=<tag> path=<vault/rel/path> [overwrite]`
 
 Create a PARA/theme note from its template. `type` ∈ `project|area|resource|archive|theme`.
-Template resolution: `<type>TemplateFilePath` if set, else `<typeDir>/Template.md`,
-else a built-in default. The template is rendered (same engine as periodic notes),
+Template selection uses the type's plural settings key (for example
+`projectsTemplateFilePath`), otherwise `<typeDir>/Template.md`. An explicit missing template fails with `template_not_found`; read failures
+propagate. Empty templates are used as-is. Only a missing conventional template
+uses the built-in default (`templatePath: null`). Older CLI versions silently
+fall back more broadly; verify the executable's behavior before relying on it. The template is rendered (same engine as periodic notes),
 then `tag` is injected into the note's `tags`/`aliases` frontmatter so the theme
 index collects it. `path=` is caller-supplied (read `config` for PARA folder
-names); convention is `<paraDir>/<name>/<name>.md`. Errors if the note exists
+names and `paraIndexFilename` / `themeIndexFilename` for `<name>.md` versus
+`README.md` / `<prefix>.README.md`). Follow
+[theme-notes.md](theme-notes.md) for template
+inspection and saved-index verification. Errors if the note exists
 unless `overwrite`. `--json` → `{ ok, filePath, created, templatePath, type, tag }`.
 
 ### `append path=<vault/rel/path> content=<text> [section=<header>]`
 
 Append to an **existing** note. Errors if the note doesn't exist (use `create`).
 Without `section=`, appends to the file tail with a newline boundary. With
-`section=<header>`, inserts at the **end of that header's section body** (matching
+`section=<header>`, inserts at the **end of that header's direct body, before the next heading of any depth** (matching
 the header at any `#` depth, ignoring case/whitespace) and creates the section at
 the end of the file if the header is missing. `--json` →
 `{ ok, filePath, created:false, section }`.
@@ -246,8 +263,16 @@ and `.htm` extensions are preserved. Errors if it exists unless `overwrite`.
 
 ### `task done|todo ref=<file>:<line>`
 
-Toggle one task's checkbox. `ref` is the `file:line` printed by `tasks` (only the
-trailing `:<digits>` is the line number, so paths with colons are fine).
+Set one task's standard checkbox to done or todo. `ref` is the current 1-based
+`file:line` printed by `tasks`, not a stable task ID. Reread and verify the task
+text before mutation, especially after edits above it. This command changes only
+the checkbox: it does not add/remove completion dates, reschedule due dates or
+support arbitrary custom statuses. Already matching state succeeds without rewriting in the updated service.
+Use `expected=<exact-current-line>` to reject stale line references with
+`task_line_changed`. Older CLI versions lack this guard and may error on an
+already matching state; reread before acting and do not retry blindly.
+Do not claim a newly checked item has dated completion evidence unless the
+completion marker was separately recorded under the authorized task workflow.
 `--json` → `{ ok, filePath, action }`.
 
 ### `onboard`

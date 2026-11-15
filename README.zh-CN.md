@@ -5,14 +5,24 @@
 一个帮助 Agent 读取、整理和持续演进本地 Markdown 知识库的 LifeOS Skill。
 它通过 `@life-os/cli` 无头运行，不需要先打开 Obsidian 或 Aino。
 
-GitHub 发行版把最新的核心、今日、看板、接管和内容工作流合并成一个扁平 Skill，
-以兼容更多导入器。LifeOS CLI 会把相同行为安装成五个聚焦的 Skill，让 Agent
+GitHub 发行版把最新的核心、Aino Web、今日、看板、接管和内容工作流合并成一个扁平 Skill，
+以兼容更多导入器。LifeOS CLI 会把相同行为安装成六个聚焦的 Skill，让 Agent
 每次只加载当前任务所需的领域能力。
 
 ## 在 LifeOS 中使用
 
 - **在 Obsidian 里使用：** 阅读 [LifeOS Skill 使用指南](https://lifeos.md/zh/guide/ai-integration/lifeos-skill)。
 - **在 Aino 里使用：** 阅读 [Aino LifeOS Skill 使用指南](https://aino.md/zh/guide/ai/lifeos-skill.html)。
+
+## 在 AI 客户端使用 Aino Web
+
+在 WorkBuddy、豆包工作、Cherry Studio、Codex 或 Claude Code 中，告诉 LifeOS Skill
+打开当前知识库的 Aino Web，就能使用原有的编辑器、日历和知识库视图。支持内嵌网页的
+客户端可以在内置浏览器中展示工作台；终端客户端使用浏览器打开。
+
+Aino Web 需要 Node.js 24+ 和 LifeOS CLI 0.1.9 或更新版本。
+[客户端接入指南](https://aino.md/zh/guide/ai/lifeos-clients)提供可直接复制的安装提示词，
+以及各客户端实际支持的打开方式。
 
 ## 能力
 
@@ -27,7 +37,7 @@ GitHub 发行版把最新的核心、今日、看板、接管和内容工作流�
 
 ## 安装
 
-把完整的五 Skill Bundle 安装到当前 LifeOS Vault：
+把完整的六个 Skill 安装到当前 LifeOS Vault：
 
 ```bash
 npx -y @life-os/cli@latest skill install

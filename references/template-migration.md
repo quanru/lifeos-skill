@@ -233,6 +233,11 @@ AI Wiki pages, or dashboards from their sources instead of treating generated
 output as ordinary imported knowledge. Move a system file only after a separate,
 path-specific confirmation.
 
+When a migration creates or repairs a target project/theme index, follow
+[`theme-notes.md`](theme-notes.md). Preserve the
+selected template's queries and metadata, and verify its saved content. A plain
+link list alone is not a template-complete target index.
+
 ## Links and attachments
 
 Before confirming a move, inspect standard Markdown links, Wikilinks, embeds,

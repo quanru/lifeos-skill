@@ -28,7 +28,8 @@ counts, health scores or conclusions.
 - The theme tag comes from the source note's `tags` Frontmatter and acts as the
   identity anchor. Show `Missing theme tag` instead of guessing one.
 - Theme index files may use `folderName` (`<folder>/<folder>.md`) or `readme`
-  (`<folder>/<leaf-tag>.README.md`) naming.
+  (`<folder>/README.md` or `<folder>/<prefix>.README.md`) naming. Reuse the
+  actual source basename; do not rename it to fit an example.
 - `TaskListByTag`, `BulletListByTag` and `FileListByTag` provide the primary
   indexed task, fleeting-note and file signals. Use related theme/project/area/
   resource/archive lists when present.
@@ -186,7 +187,10 @@ is not a fixed visual template.
 
 ## Write and verify
 
-Write the completed page to the derived sibling path:
+Write the completed page to the derived sibling path. Omit `overwrite` for a
+new file. For an existing page, read it, merge the requested update and recheck
+for intervening changes before using `overwrite`. The example below assumes
+that existing-page check has completed:
 
 ```bash
 npx -y @life-os/cli create path="4 资源/学日语/学日语.html" content="<full html>" overwrite

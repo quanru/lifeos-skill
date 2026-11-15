@@ -1,4 +1,4 @@
 interface:
   display_name: 'LifeOS Core'
-  short_description: 'Configure and safely operate a LifeOS vault'
-  default_prompt: 'Use $lifeos to inspect and safely operate this LifeOS vault.'
+  short_description: '操作 LifeOS 知识库，在桌面 AI 客户端默认提供 Web 工作台链接'
+  default_prompt: '使用 $lifeos 查看当前知识库；在 Aino Desktop 外启动或复用 Web 工作台并返回可点击链接。'

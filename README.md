@@ -6,15 +6,26 @@ A package for reading, organizing, and evolving a local Markdown knowledge base
 with LifeOS. It works headlessly through `@life-os/cli`, so Obsidian or Aino
 does not need to be open.
 
-The GitHub distribution combines the latest core, today, board, onboarding, and
+The GitHub distribution combines the latest core, Aino Web, today, board, onboarding, and
 content workflows in one flat Skill package for broad importer compatibility.
-The LifeOS CLI installs the same behavior as five focused Skills so agents can
+The LifeOS CLI installs the same behavior as six focused Skills so agents can
 load only the domain needed for each request.
 
 ## Use it with LifeOS
 
 - **In Obsidian:** follow the [LifeOS Skill guide](https://lifeos.md/zh/guide/ai-integration/lifeos-skill).
 - **In Aino:** follow the [Aino LifeOS Skill guide](https://aino.md/zh/guide/ai/lifeos-skill.html).
+
+## Aino Web in your AI client
+
+Use LifeOS Skill with WorkBuddy, Doubao Work, Cherry Studio, Codex, or Claude Code
+and ask it to open Aino Web for the current knowledge base. The local workbench
+reuses the Aino editor, calendar and knowledge views. Supported clients can show
+it in their built-in browser; terminal clients can open it in a browser.
+
+Aino Web requires Node.js 24+ and LifeOS CLI 0.1.9 or newer. See the
+[client setup guide](https://aino.md/zh/guide/ai/lifeos-clients) for a copyable
+installation prompt and the current client support boundaries.
 
 ## Capabilities
 
@@ -38,7 +49,7 @@ load only the domain needed for each request.
 
 ## Installation
 
-To install the complete five-Skill bundle into the current LifeOS vault:
+To install the complete six-Skill bundle into the current LifeOS vault:
 
 ```bash
 npx -y @life-os/cli@latest skill install

@@ -20,6 +20,14 @@ Use `minimal` unless the user explicitly wants the full periodic template set.
 
 ## Create the first useful content
 
+Use [periodic-notes.md](periodic-notes.md)
+for periodic notes, and
+[`theme-notes.md`](theme-notes.md) for every
+project/area/resource/theme index. Template application creates the structure;
+it does not authorize seeding indexes as plain Markdown. Reuse an existing
+starter instead of creating a duplicate, render the selected note template, and
+read back its lists and metadata before calling the first entry point complete.
+
 ### Memos
 
 - Create or open today's daily note.
