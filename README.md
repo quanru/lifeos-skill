@@ -93,7 +93,7 @@ Generate an HTML dashboard beside my quarterly-planning project note.
 
 ## Update
 
-Use the LifeOS CLI to inspect and atomically update all five Skills:
+Use the LifeOS CLI to inspect and atomically update all six Skills:
 
 ```bash
 npx -y @life-os/cli skill status

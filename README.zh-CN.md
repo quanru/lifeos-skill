@@ -81,7 +81,7 @@ npx skills add quanru/lifeos-skill -a codex
 
 ## 更新
 
-使用 LifeOS CLI 检查并原子更新全部五个 Skill：
+使用 LifeOS CLI 检查并原子更新全部六个 Skill：
 
 ```bash
 npx -y @life-os/cli skill status
