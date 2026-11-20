@@ -1,6 +1,6 @@
 ---
 name: lifeos
-version: "0.2.0"
+version: "0.2.1"
 display_name: "LifeOS 知识库助手"
 display_name_en: "LifeOS Knowledge Base"
 description: "Operate, organize, initialize, migrate, and review a LifeOS Markdown knowledge base through the LifeOS CLI or Aino Mobile native tools."
@@ -89,8 +89,8 @@ and preserve the requested view/filter parameters.
 To show the current local project or a requested calendar view inside an AI
 client, read [web-workbench.md](references/web-workbench.md). It covers explicit
 project paths, the CLI service lifetime, supported view parameters and verified
-client opening behavior. Web startup requires Node.js 24+ and a CLI candidate
-that includes the Web runtime; do not assume the public npm release has it.
+client opening behavior. Check the Node.js version used by the selected CLI
+and follow that build's runtime requirements.
 
 ## Resolve the vault and model
 
