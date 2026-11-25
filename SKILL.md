@@ -1,11 +1,11 @@
 ---
 name: lifeos
-version: "0.2.1"
-display_name: "LifeOS 知识库助手"
+version: "0.2.2"
+display_name: "LifeOS Knowledge Base"
 display_name_en: "LifeOS Knowledge Base"
-description: "Operate, organize, initialize, migrate, and review a LifeOS Markdown knowledge base through the LifeOS CLI or Aino Mobile native tools."
+description: "Manage a LifeOS Markdown vault, or open the current vault in Obsidian Web or Aino Web."
 description_zh: "通过 LifeOS CLI 或 Aino Mobile 原生工具读取、整理、搭建、迁移和复盘 LifeOS Markdown 知识库。"
-description_en: "Read, organize, initialize, migrate, and review a LifeOS Markdown knowledge base through the LifeOS CLI or Aino Mobile native tools."
+description_en: "Manage a LifeOS Markdown vault, or open the current vault in Obsidian Web or Aino Web."
 ---
 
 # LifeOS Core
@@ -13,25 +13,53 @@ description_en: "Read, organize, initialize, migrate, and review a LifeOS Markdo
 This flat distribution combines the complete LifeOS Skill bundle in one package.
 Apply the shared runtime and safety contract here before using any domain workflow.
 
-## Default Web entry outside Aino Desktop
+## Open a vault in a desktop AI client
 
-When the user mentions LifeOS, including the standalone message “LifeOS”, or
-asks for “aino web” / “lifeos web”, provide the Web entry by default in external
-desktop clients such as WorkBuddy, Cherry Studio, Doubao Work, Codex or Claude
-Code. Do not require the words “open”, “web” or “Skill”. Read
-[web-workbench.md](references/web-workbench.md), resolve the actual local vault,
-start or reuse its service, and include a clickable “打开 Aino Web” link in the
-reply. Continue any requested domain task and preserve its view intent; a bare
-“LifeOS” request uses the home view without changing notes or initializing a vault.
+For “open this vault”, “show this note”, or the bare “LifeOS” shortcut, use the
+current local project or the vault the user named. Search, capture, review and
+other content requests use the domain workflows below. Open a UI for those
+tasks only when the user also requests it. Aino Mobile uses its native tools.
+Inside Aino Desktop or an already open workbench, use the current UI for that
+vault unless the user asks for a different editor. Identify the host from the
+client context.
 
-Identify the current host from its explicit context or native tool metadata;
-an Aino Desktop process running elsewhere does not make this an Aino Desktop
-session. Do not enumerate system processes to identify the host. Inside Aino
-Desktop, keep using the existing native UI. Inside Aino Web, reuse the current
-verified service. Aino Mobile keeps the native-tool flow below. With no local
-execution capability or no identifiable vault, explain the missing capability
-or ask for the vault path instead of inventing a live link. Respect explicit
-requests not to start a service or to answer without opening a workbench.
+Run the bundled [editor selector](scripts/vault-editor.mjs) with Node from its
+installed Skill directory. Pass the absolute vault root. With an explicit
+product request, pass `--use obsidian` or `--use aino`. “LifeOS Web” remains
+an alias for Aino Web. For a generic request, omit `--use`.
+
+```sh
+node scripts/vault-editor.mjs "/absolute/path/to/vault"
+```
+
+The JSON result names the editor. A saved choice wins over vault markers.
+A sole `.obsidian/` selects Obsidian Web and a sole `.lifeos/` selects Aino Web.
+When both or neither exist, the selector returns `source: "ask"`. Offer the two
+editors once, explaining that this choice becomes the default for this vault.
+If it recommends Obsidian, mention that the vault lists the LifeOS Pro plugin as
+enabled. After the user chooses, rerun with `--use <editor> --remember`.
+Use the same option when the user changes the default. An explicit one-time
+open uses `--use` alone. Preferences are stored on this computer outside the vault.
+
+- **Obsidian Web** opens the Obsidian editor and compatible vault plugins. Use
+  the independently installed `obsidian-web` CLI. In WorkBuddy run
+  `obsidian-web connect --vault "<absolute vault>" --json`. Add
+  `--file "<vault-relative note.md>"` for a note. If the service is stopped,
+  relay the exact system-terminal startup command printed by the CLI. After
+  startup, retry `connect`. In a persistent local terminal, `obsidian-web open`
+  accepts the same arguments. Return the verified JSON `url` as a clickable
+  link. In WorkBuddy, pass that URL and vault directory to `present_files` if
+  available. If the CLI is missing, its macOS/Linux checkout installer is
+  `node install.mjs` from the [Obsidian Web repository](https://github.com/quanru/obsidian-web). The installer also
+  puts the executable in `~/.local/bin` if it is missing from PATH. Keep the requested editor on setup or connection errors.
+- **Aino Web** opens the Aino workspace through the LifeOS CLI. Follow the
+  [Aino Web launch instructions](references/web-workbench.md) for the local
+  service, calendar, board and editor views. Pass the same vault and requested
+  note or view. Keep Aino Web's normal licensing flow.
+
+If the host lacks a local shell or vault path, request the missing path or give
+the selected product's local command. Report a visible page only after the host
+confirms it has opened.
 
 ## Choose the domain
 
@@ -75,22 +103,6 @@ On **Aino Mobile**, use the native `lifeos_*` tools reported by
 commands. Mobile writes prepare previews only: require explicit confirmation and
 a commit receipt before claiming a mutation succeeded. Mobile never exposes
 permanent deletion. Onboarding plan/apply are CLI-only.
-
-## Open the shared Web workbench
-
-Treat “打开 Aino Web”, “打开当前项目工作台”, “用 Aino 查看这个库”,
-and “Open Aino Web” as launch requests. Start or reuse the verified local service,
-then return a clickable “打开 Aino Web” link. Host auto-opening is optional;
-do not claim the page is visible without page evidence or return a guessed link
-when startup failed.
-When the user asks to see a view or edit notes visually, offer this same entry
-and preserve the requested view/filter parameters.
-
-To show the current local project or a requested calendar view inside an AI
-client, read [web-workbench.md](references/web-workbench.md). It covers explicit
-project paths, the CLI service lifetime, supported view parameters and verified
-client opening behavior. Check the Node.js version used by the selected CLI
-and follow that build's runtime requirements.
 
 ## Resolve the vault and model
 
@@ -170,7 +182,7 @@ to refresh the manifest after a local skill edit.
 ## Scope
 
 In scope: config-aware local Markdown queries and mutations plus routing to the
-four LifeOS domain Skills, plus launching the shared local Web workbench.
+four LifeOS domain Skills and opening the selected local Web editor.
 
 Out of scope: executing Google Calendar / CalDAV sync, plugin or Aino UI implementation,
 and direct editing of `.lifeos/custom-apps` internals.
@@ -183,7 +195,7 @@ and direct editing of `.lifeos/custom-apps` internals.
 [启动与客户端打开规则](references/web-workbench.md)，按用户当前项目执行，
 不要只解释操作方法。
 
-`aino web` 和 `lifeos web` 是同一个入口的别名，不要求用户显式说“打开”或“使用 Skill”。仅提到 `LifeOS` 时由同包 `lifeos` Skill 按当前宿主提供这个入口，不复制启动实现。
+`aino web` 和 `lifeos web` 是同一个入口的别名，不要求用户显式说“打开”或“使用 Skill”。For a bare “LifeOS” or a generic vault-opening request, use the LifeOS Skill to choose the editor for that vault.
 
 “打开 aino web”不是搜索网站的请求。不要猜测或导航到 `aino.ai`、`aino.com` 等公网域名，也不要向这些站点输入密码。只打开已核对属于当前本机库的服务实际返回的 `http://127.0.0.1:<port>/...` URL。
 

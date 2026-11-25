@@ -14,11 +14,11 @@ GitHub 发行版把最新的核心、Aino Web、今日、看板、接管和内�
 - **在 Obsidian 里使用：** 阅读 [LifeOS Skill 使用指南](https://lifeos.md/zh/guide/ai-integration/lifeos-skill)。
 - **在 Aino 里使用：** 阅读 [Aino LifeOS Skill 使用指南](https://aino.md/zh/guide/ai/lifeos-skill.html)。
 
-## 在 AI 客户端使用 Aino Web
+## 在 AI 客户端打开知识库
 
-在 WorkBuddy、豆包工作、Cherry Studio、Codex 或 Claude Code 中，告诉 LifeOS Skill
-打开当前知识库的 Aino Web，就能使用原有的编辑器、日历和知识库视图。支持内嵌网页的
-客户端可以在内置浏览器中展示工作台；终端客户端使用浏览器打开。
+对客户端说「打开这个库」或「在编辑器里显示这篇笔记」。只有 `.obsidian/` 时默认打开 Obsidian Web，只有 `.lifeos/` 时默认打开 Aino Web。两个目录都有或都没有时，首次由你选择，之后在这台电脑上记住这个库的偏好。也可以随时点名某个编辑器。
+
+Obsidian Web 提供独立的 CLI 和 Skill，可打开 Obsidian 界面并加载兼容的库内插件。需要这个编辑器时单独安装。Aino Web 通过 LifeOS CLI 提供 Aino 的编辑器、日历和知识库视图。搜索、记录和复盘可以直接在对话中完成。
 
 Aino Web 需要 Node.js 24+ 和 LifeOS CLI 0.1.9 或更新版本。
 [客户端接入指南](https://aino.md/zh/guide/ai/lifeos-clients)提供可直接复制的安装提示词，

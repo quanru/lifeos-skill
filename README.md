@@ -16,12 +16,17 @@ load only the domain needed for each request.
 - **In Obsidian:** follow the [LifeOS Skill guide](https://lifeos.md/zh/guide/ai-integration/lifeos-skill).
 - **In Aino:** follow the [Aino LifeOS Skill guide](https://aino.md/zh/guide/ai/lifeos-skill.html).
 
-## Aino Web in your AI client
+## Open your vault in an AI client
 
-Use LifeOS Skill with WorkBuddy, Doubao Work, Cherry Studio, Codex, or Claude Code
-and ask it to open Aino Web for the current knowledge base. The local workbench
-reuses the Aino editor, calendar and knowledge views. Supported clients can show
-it in their built-in browser; terminal clients can open it in a browser.
+Ask “Open this vault” or “Show this note”. LifeOS Skill uses Obsidian Web for
+a folder with only `.obsidian/` and Aino Web for one with only `.lifeos/`.
+For a vault with both directories or neither, choose once. Your choice is
+saved for that vault on this computer. Name either editor to open it directly.
+
+Obsidian Web is a separate CLI with its own Skill and setup. Install it to
+open the Obsidian interface and compatible vault plugins. Aino Web uses the
+LifeOS CLI and includes Aino’s editor, calendar and knowledge views. Search,
+capture and review requests can run headlessly.
 
 Aino Web requires Node.js 24+ and LifeOS CLI 0.1.9 or newer. See the
 [client setup guide](https://aino.md/zh/guide/ai/lifeos-clients) for a copyable

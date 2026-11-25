@@ -1,6 +1,6 @@
-# 在 AI 客户端中打开项目工作台
+# Open Aino Web in an AI client
 
-用户希望查看或编辑当前本机项目，或通过对话展示某个日历视图时，使用同一套 Aino Desktop Web 工作台。无需 MCP Apps；不要生成不存在的 MCP 配置或另一套 HTML 界面。
+Use this procedure once Aino Web has been selected. It opens the shared Aino Desktop workspace and supports note and calendar views.
 
 ## 先确认运行环境与项目
 
@@ -17,7 +17,7 @@
 
 统一入口名称为 **打开 Aino Web**。用户使用这个名称时，直接执行下方流程；客户端支持快捷指令时，快捷指令内容使用下方提示词，仍由同一个 LifeOS Skill 处理，不复制一套客户端专属启动逻辑。
 
-`aino web`、`lifeos web` 都触发此入口。在 Aino Desktop 外的桌面 AI 客户端中，用户仅说 `LifeOS` 也默认启动或复用当前库并附上链接，无需先追问是否要打开；仅说产品名时使用 `view=home`。同时有任务、编辑或视图请求时按实际意图选择视图。宿主判断使用明确的客户端上下文或原生工具元信息，不通过 `ps` 判断电脑是否安装或运行了 Desktop。缺少本机执行能力、库路径或用户明确不要启动时，按实际限制处理；不把未知目录自动初始化成知识库。
+“Aino Web” and “LifeOS Web” explicitly request this workbench. Use the requested Aino view, or `view=home` when opening the workspace without a specific view. Resolve the host from the client context.
 
 固定网页入口只负责打开已有服务，不能在服务停止时自行执行本机命令。添加收藏或网站小程序前先验证目标服务属于正确项目；不要把某个测试库的临时地址配置成所有项目通用入口。需要启动或切换项目时使用 Skill 入口；没有本地执行能力时明确说明这一限制。
 
@@ -83,13 +83,11 @@ lifeos web vault="/absolute/path/to/project" view=calendar subview=kanban group-
 - 需要落盘时先展示预览并征得同意；用同一候选 CLI 的 `read` 核对目标，再 `create` 新笔记或 `append` 补充已有笔记，显式传 `vault=` 与 `path=`。用参数数组传正文，不直接拼接 shell；不要自动覆盖已有文件。
 - 只在写入命令成功后返回准确、可点击的结果链接；宿主支持时可额外自动展开。Web 通过原 Node 文件事件刷新索引和编辑器，未保存编辑沿用原冲突保护；不宣称报告自动回填到 AI 复盘面板。
 
-## 在 Aino Web 或 Desktop 中继续 AI 对话
+## 从 Aino Web 把上下文带给 AI
 
-新启动的工作台默认支持本机 Codex CLI，AI 模块仅在用户打开对话时按需启动；`ai=none` 显式关闭，保留查看、编辑和复制给宿主 AI。需要本机已安装、已登录 Codex，不会使用宿主当前对话或其模型额度。
+正式 Aino Web 的右侧栏用于查看任务和笔记上下文。AI 整理、AI 复盘和笔记的 AI 按钮可将材料交给宿主客户端或 Aino Desktop。官网在线 Demo 的侧栏对话使用示例数据和预设回复。
 
-AI 按钮主区域直接执行当前去向，小箭头才打开菜单；菜单顺序固定为“在 Aino Web 中继续”“在 Aino Desktop 中继续”“复制给宿主 AI”。Web 去向展开复用的 Aino 右侧对话栏，带入草稿与上下文，由用户检查后发送；Desktop 去向请求本机桌面端接收。复制成功要提示用户手动粘贴并发送，不宣称已填入宿主输入框。默认侧栏仍隐藏，首次使用按提示安装库内 LifeOS Skills。关闭或刷新页面会中断当前页面拥有的 CLI 连接，不能承诺任务继续在后台执行。
-
-右侧 AI 对话栏也提供“在 Aino Desktop 中继续”。它交接可见的文字对话、草稿和文件上下文，不继承宿主会话、模型账户或工具执行状态。桌面端必须包含交接协议的新版候选；已安装旧版不保证可用。出现“已请求打开”只表示发起请求，必须核对 Desktop 是否实际收到，不能当作交接成功。不要为了验证而改系统默认协议注册或替用户自动发送。
+AI 按钮主区域直接执行当前去向，小箭头打开去向菜单。默认复制给宿主 AI，成功后提示用户粘贴并发送。选择「在 Aino Desktop 中继续」会带入草稿和文件上下文，由用户在桌面端检查后发送。右侧栏也可将当前笔记交给 Desktop。看到「已请求打开」后，仍需核对桌面端是否实际收到。
 
 已运行的旧服务不自动升级能力。先保存编辑内容，使用同一候选 CLI 重新启动服务后再刷新页面；不把 URL 参数当作服务端授权开关。Web 跟随 LifeOS CLI 授权，不引入 Desktop 激活页面。
 
