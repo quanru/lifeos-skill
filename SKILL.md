@@ -39,7 +39,10 @@ editors once, explaining that this choice becomes the default for this vault.
 If it recommends Obsidian, mention that the vault lists the LifeOS Pro plugin as
 enabled. After the user chooses, rerun with `--use <editor> --remember`.
 Use the same option when the user changes the default. An explicit one-time
-open uses `--use` alone. Preferences are stored on this computer outside the vault.
+open uses `--use` alone. After a marker-based launch succeeds, run the selector
+with the returned editor and `--remember` so creating another marker on first
+open preserves the working choice. Keep that selection through any startup
+retry in the same chat. Preferences are stored on this computer outside the vault.
 
 - **Obsidian Web** opens the Obsidian editor and compatible vault plugins. Use
   the independently installed `obsidian-web` CLI. In WorkBuddy run

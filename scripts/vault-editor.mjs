@@ -18,16 +18,20 @@ async function select() {
     options: { use: { type: 'string' }, remember: { type: 'boolean' } },
   });
   const editors = ['obsidian', 'aino'];
-  if (positionals.length !== 1 || !isAbsolute(positionals[0]) ||
-      (values.use !== undefined && !editors.includes(values.use)) || (values.remember && !values.use)) {
+  if (
+    positionals.length !== 1 ||
+    !isAbsolute(positionals[0]) ||
+    (values.use !== undefined && !editors.includes(values.use)) ||
+    (values.remember && !values.use)
+  ) {
     throw new Error('Usage: node vault-editor.mjs <absolute-vault-directory> [--use obsidian|aino [--remember]]');
   }
   const vault = await realpath(positionals[0]);
   if (vault === parse(vault).root || !(await stat(vault)).isDirectory()) {
     throw new Error('Choose an existing vault directory.');
   }
-  const config = process.env.XDG_CONFIG_HOME ||
-    (process.platform === 'win32' && process.env.APPDATA) || join(homedir(), '.config');
+  const config =
+    process.env.XDG_CONFIG_HOME || (process.platform === 'win32' && process.env.APPDATA) || join(homedir(), '.config');
   const directory = join(config, 'lifeos', 'vault-editors');
   const key = createHash('sha256').update(vault).digest('hex');
   const preference = join(directory, key);
