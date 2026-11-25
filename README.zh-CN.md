@@ -18,7 +18,7 @@ GitHub 发行版把最新的核心、Aino Web、今日、看板、接管和内�
 
 对客户端说「打开这个库」或「在编辑器里显示这篇笔记」。只有 `.obsidian/` 时默认打开 Obsidian Web，只有 `.lifeos/` 时默认打开 Aino Web。两个目录都有或都没有时，首次由你选择，之后在这台电脑上记住这个库的偏好。也可以随时点名某个编辑器。
 
-Obsidian Web 提供独立的 CLI 和 Skill，可打开 Obsidian 界面并加载兼容的库内插件。需要这个编辑器时单独安装。Aino Web 通过 LifeOS CLI 提供 Aino 的编辑器、日历和知识库视图。搜索、记录和复盘可以直接在对话中完成。
+Obsidian Web 提供独立的 CLI 和 Skill，可打开 Obsidian 界面并加载兼容的库内插件。在 macOS 或 Linux 上先运行 `npm install -g @life-os/obsidian-web`，再运行 `obsidian-web setup`，需要 Node.js 22.16 或更高版本。Aino Web 通过 LifeOS CLI 提供 Aino 的编辑器、日历和知识库视图。搜索、记录和复盘可以直接在对话中完成。
 
 Aino Web 需要 Node.js 24+ 和 LifeOS CLI 0.1.9 或更新版本。
 [客户端接入指南](https://aino.md/zh/guide/ai/lifeos-clients)提供可直接复制的安装提示词，

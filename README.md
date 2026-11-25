@@ -24,7 +24,7 @@ For a vault with both directories or neither, choose once. Your choice is
 saved for that vault on this computer. Name either editor to open it directly.
 
 Obsidian Web is a separate CLI with its own Skill and setup. Install it to
-open the Obsidian interface and compatible vault plugins. Aino Web uses the
+open the Obsidian interface and compatible vault plugins. On macOS or Linux, run `npm install -g @life-os/obsidian-web` and then `obsidian-web setup` (Node.js 22.16+). Aino Web uses the
 LifeOS CLI and includes Aino’s editor, calendar and knowledge views. Search,
 capture and review requests can run headlessly.
 

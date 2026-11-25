@@ -52,9 +52,8 @@ retry in the same chat. Preferences are stored on this computer outside the vaul
   startup, retry `connect`. In a persistent local terminal, `obsidian-web open`
   accepts the same arguments. Return the verified JSON `url` as a clickable
   link. In WorkBuddy, pass that URL and vault directory to `present_files` if
-  available. If the CLI is missing, its macOS/Linux checkout installer is
-  `node install.mjs` from the [Obsidian Web repository](https://github.com/quanru/obsidian-web). The installer also
-  puts the executable in `~/.local/bin` if it is missing from PATH. Keep the requested editor on setup or connection errors.
+  available. On macOS or Linux with Node.js 22.16 or later, install the CLI with
+  `npm install -g @life-os/obsidian-web`, then run `obsidian-web setup`. The first setup can download the pinned editor runtime from the official Obsidian release. Keep the requested editor on setup or connection errors.
 - **Aino Web** opens the Aino workspace through the LifeOS CLI. Follow the
   [Aino Web launch instructions](references/web-workbench.md) for the local
   service, calendar, board and editor views. Pass the same vault and requested
