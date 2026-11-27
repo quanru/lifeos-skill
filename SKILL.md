@@ -1,6 +1,6 @@
 ---
 name: lifeos
-version: "0.2.2"
+version: "0.2.3"
 display_name: "LifeOS Knowledge Base"
 display_name_en: "LifeOS Knowledge Base"
 description: "Manage a LifeOS Markdown vault, or open the current vault in Obsidian Web or Aino Web."
